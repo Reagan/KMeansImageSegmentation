@@ -12,7 +12,7 @@ javac KNearestNeighborSegment.java
 * Running the application * 
 To run the application, use the command:
 <pre>
-java KNearestNeighborSegment <inputFilePath> <outputFilePath> <segmentationTechnique [threshold | kmeans]>
+java KNearestNeighborSegment {inputFilePath} {outputFilePath} {segmentationTechnique [threshold | kmeans]}
 <pre>
 
 The application creates a gray scale image and a segmented image. The segmented image can be generated using either the threshhold technique or using kmeans
