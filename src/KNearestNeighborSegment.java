@@ -1,5 +1,3 @@
-import org.omg.CORBA.NO_IMPLEMENT;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -21,8 +19,8 @@ public class KNearestNeighborSegment {
 
     private String inputImagePath = "";
     private String outputImagePath = "";
-    private final int NO_OF_CLUSTERS = 3 ; // select a random k value
-    private final int CLUSTER_DIFF_THRESHHOLD = 70;
+    private final int NO_OF_CLUSTERS = 5 ; // select a random k value
+    private final int CLUSTER_DIFF_THRESHHOLD = 50;
     private int[] colors ;
     private enum SegementationTechnique {
         ThreshHold, KMeans;
