@@ -254,7 +254,7 @@ public class KNearestNeighborSegment {
         return color ;
     }
 
-    private Point[] clusterPoints(BufferedImage grayscaleImage, int noOfClusters) {
+    public Point[] clusterPoints(BufferedImage grayscaleImage, int noOfClusters) {
 
         // Represent each pixel in the image with a vector
         //  •intensity
