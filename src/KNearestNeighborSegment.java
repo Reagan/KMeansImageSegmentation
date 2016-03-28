@@ -17,14 +17,13 @@ import java.util.Scanner;
  */
 public class KNearestNeighborSegment {
 
-    private String inputImagePath = "";
-    private String outputImagePath = "";
-    private final int NO_OF_CLUSTERS = 5 ; // select a random k value
+    public int[] colors ;
+    public final int NO_OF_CLUSTERS = 5 ; // select a random k value
+    public String inputImagePath = "";
+    public String outputImagePath = "";
+    public Point[] points ;
+
     private final int CLUSTER_DIFF_THRESHHOLD = 50;
-    private int[] colors ;
-    private enum SegementationTechnique {
-        ThreshHold, KMeans;
-    }
 
     /**
      * Loads in an image
@@ -43,7 +42,7 @@ public class KNearestNeighborSegment {
             }
 
             // validate segmentation technique
-            SegementationTechnique segmentationTechnique = knns.extractSegmentationTechnique(args[2]) ;
+            SegmentationTechnique segmentationTechnique = knns.extractSegmentationTechnique(args[2]) ;
 
             // generate colors
             knns.colors = knns.generateColors(knns.NO_OF_CLUSTERS) ;
@@ -71,21 +70,21 @@ public class KNearestNeighborSegment {
         }
     }
 
-    private SegementationTechnique extractSegmentationTechnique(String str) {
+    public SegmentationTechnique extractSegmentationTechnique(String str) {
         if (str.trim().toLowerCase().equals("threshhold"))
-            return SegementationTechnique.ThreshHold ;
+            return SegmentationTechnique.ThreshHold ;
         else if (str.trim().toLowerCase().equals("kmeans"))
-            return SegementationTechnique.KMeans ;
+            return SegmentationTechnique.KMeans ;
         else
             throw new IllegalArgumentException("Invalid Segmentation technique \"" + str + "\" specified") ;
     }
 
-    private void printUsage() {
+    public void printUsage() {
         System.out.println("Incorrect Usage. Use the command \"java KNearestNeighborSegment <pathToInputFile> " +
                 "<pathToOutputFile> <segmentationTechnique [threshold | kmeans]>\"");
     }
 
-    private int[] generateColors(int noOfClusters) {
+    public int[] generateColors(int noOfClusters) {
         int[] colors = new int[noOfClusters] ;
 
         for (int i = 0; i < noOfClusters; i++) {
@@ -101,21 +100,21 @@ public class KNearestNeighborSegment {
         return colors ;
     }
 
-    private String extractInputImagePath(String[] args) {
+    public String extractInputImagePath(String[] args) {
         String inputFilePath = ".";
         if (null != args && args.length > 0)
             inputFilePath = args[0];
         return inputFilePath;
     }
 
-    private String extractOutputImagePath(String[] args) {
+    public String extractOutputImagePath(String[] args) {
         String outputFilePath = "";
         if (null != args && args.length > 1)
             outputFilePath = args[1];
         return outputFilePath;
     }
 
-    private BufferedImage loadInputImage(String inputFilePath)
+    public BufferedImage loadInputImage(String inputFilePath)
             throws IOException {
         BufferedImage image = null;
         File file = new File(inputFilePath);
@@ -130,7 +129,7 @@ public class KNearestNeighborSegment {
     // The choice on the selection of gray scale method is
     // selected from Luminosity method as specified in
     // http://www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/
-    private BufferedImage convertToGrayScale(BufferedImage image) {
+    public BufferedImage convertToGrayScale(BufferedImage image) {
 
         int width = image.getWidth();
         int height = image.getHeight();
@@ -169,7 +168,7 @@ public class KNearestNeighborSegment {
         ImageIO.write(segmentedImage, fileType, new File(outputFilePath));
     }
 
-    private String getFileType(String inputImagePath)
+    public String getFileType(String inputImagePath)
             throws IOException {
         String fileType = "";
         ImageInputStream iis = ImageIO.createImageInputStream(new File(inputImagePath));
@@ -187,13 +186,13 @@ public class KNearestNeighborSegment {
      * @param image buffered image file
      * @return clusters of related pixel locations
      */
-    private BufferedImage segment(BufferedImage image, SegementationTechnique segementationTechnique) {
+    public BufferedImage segment(BufferedImage image, SegmentationTechnique SegmentationTechnique) {
 
         BufferedImage resImage = null ;
 
-        if (segementationTechnique == SegementationTechnique.ThreshHold) {
+        if (SegmentationTechnique == SegmentationTechnique.ThreshHold) {
             resImage = performSimpleThreshHolding(image);
-        } else if (segementationTechnique == SegementationTechnique.KMeans) {
+        } else if (SegmentationTechnique == SegmentationTechnique.KMeans) {
             resImage = performKMeansClustering(image) ;
         }
         return resImage ;
@@ -202,7 +201,7 @@ public class KNearestNeighborSegment {
     private BufferedImage performKMeansClustering (BufferedImage grayscaleImage) {
 
         // Step 1: Obtain the pixel clusters
-        Point[] points = clusterPoints(grayscaleImage, NO_OF_CLUSTERS) ;
+        points = clusterPoints(grayscaleImage, NO_OF_CLUSTERS) ;
 
         // Step 2: apply the pixel clusters to the image using simple thresholding technique
         // based on the number of clusters
